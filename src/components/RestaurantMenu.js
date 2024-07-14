@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
-import {MENU_API} from "../utils/constants";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
+
 
 const RestaurantMenu =()=>{
 
-    const [resInfo ,setResInfo] = useState(null);
-
     const {resId} = useParams();
-    
-    useEffect(()=>{
-        fetchMenu();
-    }, []);
+ 
+    const resInfo = useRestaurantMenu(resId);
 
-    const fetchMenu = async () => {
-        const data = await fetch( MENU_API + resId + '/')
-        const json = await data.json();
-
-        console.log(json);
-        setResInfo(json?.data);
-    };
+    //the above only 2 lines need to worry about passing the data through passin resid
+    //now we made a custom hook use restaurant menu
+    //it holds all the code for fetching the data
+    //now the lines blow only help us to dipslay the fetched data
 
     if(resInfo===null) return <Shimmer />;
 

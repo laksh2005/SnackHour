@@ -1,5 +1,5 @@
 import { CDN_URL } from '../utils/constants';
-import styleCard from './styleCard'
+
 
 const RestaurantCard = (props) => {
     const { resData } = props;
@@ -10,30 +10,28 @@ const RestaurantCard = (props) => {
       cuisines,
       avgRating,
       costForTwo,
-    } = resData?.data;
+    } = resData?.info;
 
     const {
         deliveryTime
-    } = resData?.data?.sla;
+    } = resData?.info?.sla;
   
     return (
-        <div
-            className="restro-card"
-            style={styleCard}
-        >
-      <div className="restro-img">
-        <img
-          className="restro-logo"
-          src={CDN_URL + cloudinaryImageId}
-        />
-      </div>
+      <div
+      className="m-4 p-4 w-[250px] rounded-lg hover:bg-blue-300 bg-blue-100">
+      <img
+        className="rounded-lg"
+        src={CDN_URL + cloudinaryImageId}
+      />
 
-            <h3>{name}</h3>
-            <h4>{cuisines.join(', ')}</h4>
-            <h4>{avgRating} ⭐</h4>
-            <h4>{costForTwo}</h4>
-            <h4>{deliveryTime} minutes ⏱️</h4>
-        </div>
+        <h3 className="font-bold py-4 text-lg">{name}</h3>
+        <br></br>
+        <em>{cuisines.join(', ')}</em>
+        <h4>{avgRating} stars ⭐</h4>
+        <h4>{costForTwo}</h4>
+        <h4>{deliveryTime} minutes ⏲️</h4>
+
+    </div>
     );
 };
 
