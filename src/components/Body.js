@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext} from 'react';
 import RestaurantCard from './RestaurantCard';
 import Shimmer from './Shimmer';
 import { Link } from 'react-router-dom';
 import useOnlineStatus from '../utils/useOnlineStatus';
+import UserContext from '../utils/UserContext';
 
 const Body = () => {
 
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
   const [filteredRestaurants, setfilteredRestaurants] = useState([]);
-  const [searchText, setsearchText] = useState('');
+  const [searchText, setSearchText] = useState('');
   
-
   console.log("Body Rendered");
 
+  
+  const { loggedInUser, setuserName } = useContext(UserContext);
+  
   useEffect(()=>{
     fetchData();
   }, []);
@@ -29,11 +32,12 @@ const Body = () => {
 
     // * optional chaining
     setListOfRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    setfilteredRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setfilteredRestaurants(json.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
   };
 
   const onlineStatus = useOnlineStatus();
   if(onlineStatus === false) return <h1>Check you Internet Connection 📶</h1>
+
 
     //conditional rendering
 //  if(listOfRestaurants.length === 0){ //we will use shimmer ai here 
@@ -42,37 +46,40 @@ const Body = () => {
 
 //we can write this if condition by integrating it below too
 
-  return listOfRestaurants === null ? <Shimmer /> : (    //means if length=0 return shimmer, or else return the below code
+  return listOfRestaurants.length === 0 ? <Shimmer /> : (    //means if length=0 return shimmer, or else return the below code
     <div className="body">
       <div className="filter flex">  
 {/*SEARCH button*/}
-        <div className="search m-4 p-4 ">
-           <input type="text" 
-            className="border border-solid border-black"
-            placeholder="Search Food or Restaurant"  
+        <div className="m-4 p-4 search">
+           <input 
+            type="text" 
+            data-testid="searchInput"
+            className="px-4 py-2 border border-transparent shadow-md font-medium bg-gray-100 rounded-md focus:border-0 focus:outline-0 w-[300px] placeholder:font-medium focus:border-b-2 focus:border-yellow-500"
+            placeholder="Search Restaurant"  
             value={searchText} 
             onChange={(e)=>{
-              setsearchText(e.target.value);
+              setSearchText(e.target.value);
             }}
             />
-           <button className='px-4 py-2 m-4 bg-yellow-200 rounded-xl' onClick={()=>{
-            console.log(searchText)
-            const filteredRestaurants = listOfRestaurants.filter(
-              (res)=> res?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants?.info?.name?.toLowerCase()?.includes(searchText?.toLowerCase())
-            );
-            //the .includes at the last means that whatever we search, example "cafe", is included in the name of the restaurant from location.
+           <button className='px-4 py-2 m-4 bg-yellow-200 rounded-xl'
+            onClick={()=>{
+              console.log(searchText);
+
+              const filteredRestaurants = listOfRestaurants.filter((res)=> res.info?.name?.toLowerCase().includes(searchText.toLowerCase())
+              );
+              //the .includes at the last means that whatever we search, example "cafe", is included in the name of the restaurant from location.
             
-            setfilteredRestaurants(filteredRestaurants);
-           
-           }}>Search</button>
+              setfilteredRestaurants(filteredRestaurants);
+              setSearchText(filteredRestaurants);
+           }}>🔍</button>
         </div> 
 {/*FILTER BUTTON*/}
-        <div className="search m-4 p-4 flex items-center">
+        <div className="filter m-4 p-4 flex items-center">
         <button 
           className="px-4 py-2 bg-green-300 rounded-xl"
           onClick={() => {
             const filteredList = listOfRestaurants.filter(
-              (res) => res.data.cards[4].card.card.gridElements.infoWithStyle.restaurants.info.avgRating > 4
+              (res) => parseFloat(res.info?.avgRating) > 4
             );
 
             setListOfRestaurants(filteredList);
@@ -81,6 +88,15 @@ const Body = () => {
         >
           Top Rated Restaurants
         </button>
+        </div>
+{/*INPUT BOX*/}
+        <div className="search m-4 p-4 flex items-center">
+          <label>User Name: </label>
+          <input 
+          className='border border-black p-2'
+          value={loggedInUser}
+          onChange={(e)=> setuserName(e.target.value)}
+          />
         </div>
       </div>
       <div className="flex flex-wrap">

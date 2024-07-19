@@ -33,12 +33,12 @@ class UserClass extends React.Component{
         const {avatar_url, name,location, login} = this.state.userInfo;
 
         return (
-            <div className="user-card">
-                <img className="github-pfp" src={avatar_url} />
-               <h2>Name: {name}</h2>
-               <h3>Location: {location}</h3>
-               <h3>GitHub: {login}</h3>
-               <h4>Contact: @je.suis.laksh</h4>
+            <div className="user-card m-4 p-4">
+                <img className="github-pfp border border-black border-dotted w-24" src={avatar_url} />
+               <h2 className="text-2xl">Name: {name}</h2>
+               <h3 className="text-2xl">Location: {location}</h3>
+               <h3 className="text-2xl">GitHub: {login}</h3>
+               <h4 className="text-2xl">Contact: lakshnijhawan18@gmail.com</h4>
            </div>
            )
     }

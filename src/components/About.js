@@ -17,8 +17,8 @@ class About extends Component{
         //console.log("Parent Render")
         return(
         <div>
-            <h1>About 📋</h1>
-            <h2>This is me learning Routing in React JS</h2>
+            <h1 className="font-bold text-3xl p-4 m-4">About 📋</h1>
+            <h2 className="text-xl p-4 m-4">This is me learning Routing in React JS</h2>
             <UserClass name={"Laksh Nijhawan (class)"} location={"New Delhi (class)"}/>
         </div>
     );

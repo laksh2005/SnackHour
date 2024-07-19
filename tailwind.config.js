@@ -4,8 +4,12 @@ module.exports = {
     "./src/**/*.{html,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        customColor: '#FD6D53',
+      },
+    },
   },
+  variants: {},
   plugins: [],
 }
-
